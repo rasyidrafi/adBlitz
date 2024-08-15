@@ -10,8 +10,8 @@ const execute = (targetNode) => {
     const increaseAdPlaybackSpeed = () => {
         const videoElement = document.querySelector("video")
         if (videoElement) {
-            videoElement.playbackRate = Math.floor(Math.random() * 6) + 10; // Randomize between 10 and 15
-            videoElement.volume = (Math.floor(Math.random() * 10) + 1) / 10; // Randomize between 0.1 and 1
+            videoElement.playbackRate = Math.floor(Math.random() * 4) + 2; // Randomize between 2 and 5
+            videoElement.volume = 0;
             chrome.runtime.sendMessage({ action: 'adSpeeded' });
         }
     }
