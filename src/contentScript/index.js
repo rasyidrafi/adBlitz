@@ -84,30 +84,22 @@ const execute = (targetNode) => {
     checkForChildElementAndSkipAd(targetNode)
 }
 
-/**
- * Handles changes in the URL and triggers ad skipping logic accordingly.
-*/
-
-// Variable to store the previous URL
-let previousTitle = ''
-
-// Function to handle URL changes
-const handleUrlChange = () => {
-    // Check if URL has changed
-    if (document.title !== previousTitle) {
-        // Update previousUrl with current URL
-        previousTitle = document.title;
-
-        // Find the targetNode containing video ads
-        const targetNode = document.querySelector(".video-ads.ytp-ad-module");
-        // Execute ad skipping logic if targetNode exists
-        targetNode && execute(targetNode)
-
-    }
+const handleSkipOrSpeedAd = () => {
+    const targetNode = document.querySelector(".video-ads.ytp-ad-module");
+    targetNode && execute(targetNode)
 }
-/**
- * Observes changes in the <head> element to detect URL changes.
-*/
-// MutationObserver to observe changes to the <title> element for URL changes
-const observerForUrlChange = new MutationObserver(handleUrlChange);
-observerForUrlChange.observe(document.querySelector('title'), { childList: true });
+
+// MutationObserver to observe changes
+if (window.MutationObserver) {
+    const observer = new MutationObserver(handleSkipOrSpeedAd);
+    observer.observe(document.body, {
+        atrributes: true,
+        attributeFilter: ['class', 'src'],
+        childList: true,
+        subtree: true
+    })
+} else {
+    window.setInterval(handleSkipOrSpeedAd, 500);
+}
+
+handleSkipOrSpeedAd()
