@@ -8,6 +8,7 @@
 
 # production
 /build
+/addThisToChrome
 /package
 
 # misc

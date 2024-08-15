@@ -10,11 +10,19 @@ const execute = (targetNode) => {
     const increaseAdPlaybackSpeed = () => {
         const videoElement = document.querySelector("video")
         if (videoElement) {
-            videoElement.playbackRate = 16
-            videoElement.volume = 0
+            videoElement.playbackRate = Math.floor(Math.random() * 6) + 10; // Randomize between 10 and 15
+            videoElement.volume = (Math.floor(Math.random() * 10) + 1) / 10; // Randomize between 0.1 and 1
             chrome.runtime.sendMessage({ action: 'adSpeeded' });
         }
     }
+
+    const skipAdWithDelay = (button) => {
+        const delay = Math.floor(Math.random() * 2000) + 1000; // Random delay between 1000ms and 3000ms
+        setTimeout(() => {
+            button.click();
+            chrome.runtime.sendMessage({ action: 'adSkipped' });
+        }, delay);
+    };
 
     const skipAdFallback = () => {
         let isSkipped = false;
@@ -23,25 +31,21 @@ const execute = (targetNode) => {
             const button = skipAddButtons[0];
             const skipButtonCta = button.parentElement.classList.contains("ytp-ad-skip-button-modern");
             if (skipButtonCta) {
-                button.parentElement.click();
-                chrome.runtime.sendMessage({ action: 'adSkipped' });
-                isSkipped = true
+                skipAdWithDelay(button.parentElement);
+                isSkipped = true;
             }
         }
-
         return isSkipped
     }
 
-    // Function to skip the ad
     const skipAd = () => {
         const skipAddButtons = document.getElementsByClassName("ytp-skip-ad-button");
         if (skipAddButtons.length) {
             const skipButtonCta = skipAddButtons[0];
             if (skipButtonCta) {
-                skipButtonCta.click();
-                chrome.runtime.sendMessage({ action: 'adSkipped' });
+                skipAdWithDelay(skipButtonCta);
             }
-    } else if(! skipAdFallback()){
+        } else if (!skipAdFallback()) {
             increaseAdPlaybackSpeed()
         }
     };
@@ -60,7 +64,10 @@ const execute = (targetNode) => {
     const observerCallback = (mutationsList, observer) => {
         for (let mutation of mutationsList) {
             if (mutation.type === 'childList') {
-                checkForChildElementAndSkipAd(targetNode)
+                const randomTimeout = Math.random() * (2000 - 500) + 500; // Random delay between 500ms and 2000ms
+                setTimeout(() => {
+                    checkForChildElementAndSkipAd(targetNode);
+                }, randomTimeout);
             }
         }
     }
