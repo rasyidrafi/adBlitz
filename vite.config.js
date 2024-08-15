@@ -7,7 +7,7 @@ export default defineConfig(({ mode }) => {
   return {
     build: {
       emptyOutDir: true,
-      outDir: 'build',
+      outDir: 'addThisToChrome',
       rollupOptions: {
         output: {
           chunkFileNames: 'assets/chunk-[hash].js',
