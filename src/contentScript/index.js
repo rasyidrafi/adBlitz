@@ -51,30 +51,32 @@ const execute = (targetNode) => {
         const videoElement = document.querySelector("video");
         if (!videoElement) return;
 
-        videoElement.playbackRate = Math.floor(Math.random() * 5) + 4; // Randomize between 4 and 8
+        videoElement.playbackRate = 2; // Speed up the video
         videoElement.volume = 0;
         chrome.runtime.sendMessage({ action: 'adSpeeded' });
 
-        let mainSkipButton = document.getElementsByClassName("ytp-skip-ad-button");
-        if (mainSkipButton && mainSkipButton.length > 0) {
-            mainSkipButton = mainSkipButton[0];
-        }
+        // let mainSkipButton = document.getElementsByClassName("ytp-skip-ad-button");
+        // if (mainSkipButton && mainSkipButton.length > 0) {
+        //     mainSkipButton = mainSkipButton[0];
+        // }
 
-        if (!mainSkipButton || mainSkipButton.length === 0) {
-            const skipAddButtonText = document.getElementsByClassName("ytp-ad-skip-button-text");
-            if (skipAddButtonText && skipAddButtonText.length > 0) {
-                let button = skipAddButtonText[0];
-                const skipAddButtonCta = button.parentElement.classList.contains("ytp-ad-skip-button-modern");
+        // if (!mainSkipButton || mainSkipButton.length === 0) {
+        //     const skipAddButtonText = document.getElementsByClassName("ytp-ad-skip-button-text");
+        //     if (skipAddButtonText && skipAddButtonText.length > 0) {
+        //         let button = skipAddButtonText[0];
+        //         const skipAddButtonCta = button.parentElement.classList.contains("ytp-ad-skip-button-modern");
 
-                if (skipAddButtonCta) {
-                    mainSkipButton = button.parentElement;
-                }
-            }
-        }
+        //         if (skipAddButtonCta) {
+        //             mainSkipButton = button.parentElement;
+        //         }
+        //     }
+        // }
 
-        if (mainSkipButton) {
-            skipAdWithDelay(mainSkipButton);
-        }
+        // if (mainSkipButton) {
+        //     // Force the button to be clickable manually
+        //     mainSkipButton.style.pointerEvents = 'auto'; // Allow the button to be clickable
+        //     mainSkipButton.style.cursor = 'pointer'; // Change the cursor to indicate the button is clickable
+        // }
     }
 
     // Function to check if a node has child elements
