@@ -7,7 +7,39 @@ let observer;
 
 // Function to handle ad skipping logic
 const execute = (targetNode) => {
+    const simulateMouseMovement = (element) => {
+        const rect = element.getBoundingClientRect();
+
+        // Simulate mouse movements by firing mouse events
+        const mouseMove = new MouseEvent('mousemove', {
+            bubbles: true,
+            clientX: rect.left + rect.width / 2,
+            clientY: rect.top + rect.height / 2
+        });
+
+        element.dispatchEvent(mouseMove);
+
+        // Simulate mouse enter event
+        const mouseEnter = new MouseEvent('mouseenter', {
+            bubbles: true,
+            clientX: rect.left + rect.width / 2,
+            clientY: rect.top + rect.height / 2
+        });
+
+        element.dispatchEvent(mouseEnter);
+
+        // Simulate mouse over event
+        const mouseOver = new MouseEvent('mouseover', {
+            bubbles: true,
+            clientX: rect.left + rect.width / 2,
+            clientY: rect.top + rect.height / 2
+        });
+
+        element.dispatchEvent(mouseOver);
+    };
+
     const skipAdWithDelay = (button) => {
+        simulateMouseMovement(button);  // Simulate mouse movement to the button
         const delay = Math.floor(Math.random() * 3000) + 3000; // Random delay between 3000ms and 6000ms
         setTimeout(() => {
             button.click();
