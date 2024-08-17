@@ -7,12 +7,41 @@ let observer;
 
 // Function to handle ad skipping logic
 const execute = (targetNode) => {
-    const increaseAdPlaybackSpeed = () => {
-        const videoElement = document.querySelector("video")
-        if (videoElement) {
-            videoElement.playbackRate = Math.floor(Math.random() * 5) + 4; // Randomize between 4 and 8
-            videoElement.volume = 0;
-            chrome.runtime.sendMessage({ action: 'adSpeeded' });
+    const skipAdWithDelay = (button) => {
+        const delay = Math.floor(Math.random() * 3000) + 3000; // Random delay between 3000ms and 6000ms
+        setTimeout(() => {
+            button.click();
+            chrome.runtime.sendMessage({ action: 'adSkipped' });
+        }, delay);
+    };
+
+    const skipAndSpeed = () => {
+        const videoElement = document.querySelector("video");
+        if (!videoElement) return;
+
+        videoElement.playbackRate = Math.floor(Math.random() * 5) + 4; // Randomize between 4 and 8
+        videoElement.volume = 0;
+        chrome.runtime.sendMessage({ action: 'adSpeeded' });
+
+        let mainSkipButton = document.getElementsByClassName("ytp-skip-ad-button");
+        if (mainSkipButton && mainSkipButton.length > 0) {
+            mainSkipButton = mainSkipButton[0];
+        }
+
+        if (!mainSkipButton || mainSkipButton.length === 0) {
+            const skipAddButtonText = document.getElementsByClassName("ytp-ad-skip-button-text");
+            if (skipAddButtonText && skipAddButtonText.length > 0) {
+                let button = skipAddButtonText[0];
+                const skipAddButtonCta = button.parentElement.classList.contains("ytp-ad-skip-button-modern");
+
+                if (skipAddButtonCta) {
+                    mainSkipButton = button.parentElement;
+                }
+            }
+        }
+
+        if (mainSkipButton) {
+            skipAdWithDelay(mainSkipButton);
         }
     }
 
@@ -23,7 +52,7 @@ const execute = (targetNode) => {
 
     // Function to check for child elements and skip ad
     const checkForChildElementAndSkipAd = (node) => {
-        checkChildElements(node) && increaseAdPlaybackSpeed()
+        checkChildElements(node) && skipAndSpeed()
     }
 
     // Callback function for MutationObserver
