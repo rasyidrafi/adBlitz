@@ -51,7 +51,7 @@ const execute = (targetNode) => {
         const videoElement = document.querySelector("video");
         if (!videoElement) return;
 
-        videoElement.playbackRate = 2; // Speed up the video
+        videoElement.playbackRate = 3; // Speed up the video
         videoElement.volume = 0;
         chrome.runtime.sendMessage({ action: 'adSpeeded' });
 
